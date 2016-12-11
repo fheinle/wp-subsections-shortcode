@@ -42,7 +42,7 @@ function subsection_shortcode_init()
 				if (has_excerpt()) {
 					$formatted_list_of_posts .= '<tr><td class="ProfessionText">' . get_the_excerpt() . '</td></tr>\n';
 				} /* TODO: Add custom symbol */
-				$formatted_list_of_posts .= '</table>'
+				$formatted_list_of_posts .= '</table>';
 			}
 		} else {
 			$formatted_list_of_posts = "";
