@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Subsections Shortcode
-Plugin URI: https://github.com/fheinle/wp-subsections shortcode
+Plugin URI: https://github.com/fheinle/wp-subsections-shortcode
 Description: Retrieve all pages with a given category
 Version: 1.0
 Author: Florian Heinle
