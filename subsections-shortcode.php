@@ -32,10 +32,15 @@ function subsection_shortcode_init()
 			$formatted_list_of_posts = "<ul>\n";
 			while ($category_pages->have_posts()) {
 				$category_pages->the_post();
-				$formatted_list_of_posts = $formatted_list_of_posts . "<li>Titel:" . get_the_title() . "</li>\n";
-			}
-			$formatted_list_of_posts = $formatted_list_of_posts . "</ul>\n";
 
+				$formatted_list_of_posts .= '<a class="ImageTextBox BackgroundColorLightGrey"' . get_the_post_link() . '">' . get_the_title() . '\n';
+				$formatted_list_of_posts .= get_the_post_thumbnail('ImageTextBox') . '\n';
+				$formatted_list_of_posts .= '<table class="InternalTextBox"><tbody><tr><td colspan="2"><h3>' . get_the__title() . '</h3></td></tr>\n';
+				if (has_excerpt) {
+					$formatted_list_of_posts .= '<tr><td class="ProfessionText">' . get_the_excerpt() . '</td></tr>\n'
+				} /* TODO: Add custom symbol */
+				$formatted_list_of_posts .= '</table>'
+			}
 		} else {
 			$formatted_list_of_posts = "";
 		}
