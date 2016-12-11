@@ -35,7 +35,9 @@ function subsection_shortcode_init()
 				$category_pages->the_post();
 
 				$formatted_list_of_posts .= '<a class="ImageTextBox BackgroundColorLightGrey"' . get_the_post_link() . '">' . get_the_title() . '\n';
-				$formatted_list_of_posts .= get_the_post_thumbnail($atts->picture_size) . '\n';
+				if (has_post_thumbnail()) {
+					$formatted_list_of_posts .= get_the_post_thumbnail($atts->picture_size) . '\n';
+				}
 				$formatted_list_of_posts .= '<table class="InternalTextBox"><tbody><tr><td colspan="2"><h3>' . get_the__title() . '</h3></td></tr>\n';
 				if (has_excerpt) {
 					$formatted_list_of_posts .= '<tr><td class="ProfessionText">' . get_the_excerpt() . '</td></tr>\n'
