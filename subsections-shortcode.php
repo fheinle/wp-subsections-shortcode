@@ -11,32 +11,29 @@ License: GPL2
 
 function subsection_shortcode_init()
 {
-	function subsection_shortcode( $atts ) {
+	function subsection_shortcode( $atts, $cnotent= null, tag='') {
+		$atts = array_change_key_case((array)$atts, CASE_LOWER);
 		$atts = shortcode_atts(
 			array(
-				'category' => 'about',
+				'category' => 'about'
 			),
-			$query_pages_with_category = array(
-				'post-type'	=> 'page',
-				'order'		=> 'ASC',
-				'orderby'	=> 'menu_order',
-				'taxonomy'	=> 'category',
-				'field'		=> 'slug',
-				'term'		=> $atts->category;
-			)
-			$category_pages = new WP_QUERY($query_pages_with_category);
-	?>
-	<ul>
-	<?php
-			foreach (category_pages as category_page)
-			{
-				?><li><?php echo $category_page->post_title; ?></li>
-		<?php
-			}
-		?>
-	</ul>
+			$atts
 		);
-
+		$query_pages_with_category = array(
+			'post-type'	=> 'page',
+			'order'		=> 'ASC',
+			'orderby'	=> 'menu_order',
+			'taxonomy'	=> 'category',
+			'field'		=> 'slug',
+			'term'		=> $atts->category
+		);
+		$category_pages = new WP_QUERY($query_pages_with_category);
+		echo "<ul>";
+		foreach ($category_pages as $category_page)
+		{
+			echo "<li>" . $category_page->post_title ."<li>";
+		}
+		echo "</ul>";
 	}
 	add_shortcode( 'subsection', 'subsection_shortcode' );
 }
