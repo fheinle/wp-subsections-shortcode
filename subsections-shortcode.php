@@ -1,9 +1,13 @@
 <?php
-/* Subsection navigation shortcode
- * Will provide list of posts with a given category
- * (C) 2016 Florian Heinle <launchpad@planet-tiax.de>
- * License: GPLv2
- */
+/*
+Plugin Name: Subsections Shortcode
+Plugin URI: https://github.com/wp-subsections shortcode
+Description: Retrieve all pages with a given category
+Version: 1.0
+Author: Florian Heinle
+Author URI: https://www.florianheinle.de
+License: GPL2
+*/
 
 function subsection_shortcode_init()
 {
