@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Subsections Shortcode
-Plugin URI: https://github.com/fheinle/wp-subsections-shortcode
+Plugin URI: https://github.com/wp-subsections shortcode
 Description: Retrieve all pages with a given category
 Version: 1.0
 Author: Florian Heinle
@@ -12,41 +12,65 @@ License: GPL2
 function subsection_shortcode_init()
 {
 	function subsection_shortcode($atts = [], $content = null, $tag = '') {
+
 		$atts = array_change_key_case((array)$atts, CASE_LOWER);
 		$atts = shortcode_atts(
 			array(
-				'category' => 'about',
-				'picture_size' => 'ImageTextBox'
+				'category'			=> 'about',
+				'picture_size'	=> 'ImageTextBox',
+				'type'					=> 'content',
 			),
 			$atts,
 			$tags
 		);
+
 		$args = array(
 			'post_type'              => array( 'page' ),
-			'category_name'          => $atts->category,
+			'category_name'          => $atts['category'],
 			'nopaging'               => true,
 			'order'                  => 'ASC',
 			'orderby'                => 'menu_order',
 		);
-		$category_pages = new WP_QUERY($args);
-		if ($category_pages->have_posts()) {
-			$formatted_list_of_posts = "<ul>\n";
-			while ($category_pages->have_posts()) {
-				$category_pages->the_post();
 
-				$formatted_list_of_posts .= '<a class="ImageTextBox BackgroundColorLightGrey" href="' . get_the_permalink() . '">';
-				if (has_post_thumbnail()) {
-					$formatted_list_of_posts .= get_the_post_thumbnail($atts->picture_size);
-				}
-				$formatted_list_of_posts .= '<table class="InternalTextBox"><tbody><tr><td colspan="2"><h3>' . get_the_title() . '</h3></td></tr>';
-				if (has_excerpt()) {
-					$formatted_list_of_posts .= '<tr><td class="ProfessionText">' . get_the_excerpt() . '</td></tr>';
-				} /* TODO: Add custom symbol */
-				$formatted_list_of_posts .= '</table></a>';
+		$formatted_list_of_posts = '';
+		$category_pages = get_posts($args);
+		foreach ( $category_pages as $page ) {
+			setup_postdata( $page );
+			if ($atts['picture_size'] != 'SmallExternalContactTextBox')
+			{
+				$background_class = 'BackgroundColorLightGrey';
+			} else { $background_class = ''; }
+			$formatted_list_of_posts .= '<div class="' . $atts['picture_size'] . ' ' . $background_class . '">';
+			if ($atts['type'] == 'excerpt')
+			{
+				$formatted_list_of_posts .= '<a href="' . get_the_permalink($page) . '">';
 			}
-		} else {
-			$formatted_list_of_posts = "";
+			if (has_post_thumbnail($page)) {
+				$formatted_list_of_posts .= get_the_post_thumbnail($page, $atts['picture_size']);
+			}
+			$formatted_list_of_posts .= '<table class="InternalTextBox"><tbody><tr><td colspan="2"><h3>' . get_the_title($page) . '</h3></td></tr>';
+
+			switch ($atts['type']) {
+			case 'excerpt':
+				$formatted_list_of_posts .= '<tr><td class="ProfessionText">' . get_the_excerpt($page) . '</td></tr>';
+				break;
+			case 'content':
+				$content = apply_filters('the_content', get_the_content($page));
+				$formatted_list_of_posts .= '<tr><td>' . $content . '</td></tr>';
+				break;
+			case 'link':
+				$formatted_list_of_posts .= '<tr><td><a href="' . get_the_excerpt($page) . '">' . get_the_content($page) . '</td></tr>';
+				break;
+			} /* TODO: Add custom symbol */
+
+			$formatted_list_of_posts .= '</table>';
+			if ($atts['type'] == 'excerpt') {
+				$formatted_list_of_posts .= '</a>';
+			}
+			$formatted_list_of_posts .= '</div>';
 		}
+		wp_reset_postdata();
+		$formatted_list_of_posts .= '<div class="FloatClearDiv"></div>';
 		return $formatted_list_of_posts;
 	}
 	add_shortcode( 'subsection', 'subsection_shortcode' );
