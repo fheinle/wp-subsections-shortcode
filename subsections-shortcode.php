@@ -34,21 +34,17 @@ function subsection_shortcode_init()
 
 		$formatted_list_of_posts = '';
 		$category_pages = get_posts($args);
-		foreach ( $category_pages as $page ) {
-			setup_postdata( $page );
-			if ($atts['picture_size'] != 'SmallExternalContactTextBox')
-			{
-				$background_class = 'BackgroundColorLightGrey';
-			} else { $background_class = ''; }
-			$formatted_list_of_posts .= '<div class="' . $atts['picture_size'] . ' ' . $background_class . '">';
-			if ($atts['type'] == 'excerpt')
-			{
-				$formatted_list_of_posts .= '<a href="' . get_the_permalink($page) . '">';
-			}
-			if (has_post_thumbnail($page)) {
-				$formatted_list_of_posts .= get_the_post_thumbnail($page, $atts['picture_size']);
+		if ( $atts['category'] == 'Kurs' ) {
+			$formatted_list_of_posts .= '<div class="MainFloatLeftDiv"><table><tbody>';
+			foreach ( $category_pages as $page ) {
+				setup_postdata( $page );
+				$content = apply_filters('the_content', get_the_content($page));
+				$thumb = get_the_post_thumbnail($page, 'ImageTextBox');
+				$formatted_list_of_posts .= '<tr><td>' . $thumb . '</td>';
+				$formatted_list_of_posts .= '<td><h3>' . get_the_title($page) . '</h3>' . $content . '</td></tr>';
 			}
 			$formatted_list_of_posts .= '<table class="InternalTextBox"><tbody><tr><td colspan="2"><h3>' . get_the_title($page) . '</h3></td></tr>';
+			$formatted_list_of_posts .= '</tbody></table></div>';
 
 			switch ($atts['type']) {
 			case 'excerpt':
