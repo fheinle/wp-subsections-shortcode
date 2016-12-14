@@ -47,6 +47,10 @@ function subsection_shortcode_init()
 		} else {
 			foreach ( $category_pages as $page ) {
 				setup_postdata( $page );
+				if ($atts['picture_size'] != 'SmallExternalContactTextBox')
+				{
+					$background_class = 'BackgroundColorLightGrey';
+				} else { $background_class = ''; }
 				$formatted_list_of_posts .= '<div class="' . $atts['picture_size'] . ' ' . $background_class . '">';
 				if ($atts['type'] == 'excerpt' || $atts['type'] == 'headline')
 				{
